@@ -23,8 +23,9 @@ pageEncoding="ISO-8859-1"%>
 <th><c:out value="${list.password}" /></th>
 <th><c:out value="${list.email}" /></th>
 <th><c:out value="${list.dni}" /></th>
+</c:forEach>
 </tr>
-</c:forEach> 
+ 
 </table>
 </body>
 </html>
