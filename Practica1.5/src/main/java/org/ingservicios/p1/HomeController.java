@@ -63,14 +63,16 @@ public class HomeController {
 		
 		if(cookieValue.equals("Admin")&& cookie2Value.equals("12345")) {
 			
-			List <DTOArticulo> list = daoA.leeArticulo();
-			model.addAttribute("list", list);
-			return "articulo";
+			List <DTOUsuarios> lista = dao.leeUsuarios();
+			model.addAttribute("lista", lista);
+			return "usuario";
 			
 		}else {
 			//Si el valor de las cookies no es el anterior significa que el usuario se ha autenticado para acceder a los
 			//articulos por ello mostramos articulo.jsp, no hace falta autenticar porque ya lo ha echo antes
 			
+			List <DTOArticulo> list = daoA.leeArticulo();
+			model.addAttribute("list", list);
 			return"articulo";
 
 
@@ -93,12 +95,16 @@ public class HomeController {
 		
 		List <DTOUsuarios> lista = dao.leeUsuarios();
 		
-		//Creamos  cookie
-		String cookiename = request.getParameter("username");
-		String cookiepass = request.getParameter("pass");
 		
-		
+		Cookie c1=null;
+		Cookie c2=null;
 		if(dao.buscaAdmin(usuario, pass)!=null) {
+			c1 = new Cookie("user", usuario);
+			c2 = new Cookie ("pass", pass);
+			c1.setPath("/");
+			response.addCookie(c1);
+			c2.setPath("/");
+			response.addCookie(c2);
 			
         			model.addAttribute("lista",lista);
         			url="usuario";
@@ -112,16 +118,14 @@ public class HomeController {
 		}else if(dao.buscaUsuario(usuario, pass)!=null){
 				
 				
-				Cookie c = new Cookie("user", cookiename);
-				Cookie c1 = new Cookie("pass", cookiepass);
-				c.setPath("/");
-				response.addCookie(c);
-				
+			 c1 = new Cookie("user", usuario);
+			 c2 = new Cookie("pass", pass);
 				c1.setPath("/");
 				response.addCookie(c1);
 				
-				c.setMaxAge(500);//Expire cookie
-				c1.setMaxAge(500);//Expire cookie
+				c2.setPath("/");
+				response.addCookie(c2);
+				
 			
 				
 
