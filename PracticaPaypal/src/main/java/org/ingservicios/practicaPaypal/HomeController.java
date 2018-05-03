@@ -65,15 +65,16 @@ public class HomeController {
 				
 			}
 			
-			if(cookieValue.equals("Admin") && cookieValuePassword.equals("12345")) {
-			List <DTOUsuarios> lista = dao.leeUsuarios();
-			model.addAttribute("lista", lista);
-			url="usuario";
-			}else{
-			List <DTOArticulos> listaArticulos = dao2.leeArticulos();
-			model.addAttribute("listaArticulos", listaArticulos);
-			url="listaArticulos";
-			}
+				if(cookieValue.equals("Admin") && cookieValuePassword.equals("12345")) {
+				List <DTOUsuarios> lista = dao.leeUsuarios();
+				model.addAttribute("lista", lista);
+				url="usuario";
+				} else if(dao.buscaUsuario(cookieValue, cookieValuePassword)!=null){
+					List <DTOArticulos> listaArticulos = dao2.leeArticulos();
+					model.addAttribute("listaArticulos", listaArticulos);
+					url="listaArticulos";
+						}else return "home";
+			
 			
 		}else {
 			url = "home";
@@ -116,10 +117,7 @@ public class HomeController {
 				resp.addCookie(c);
 				c2.setPath("/");
 				resp.addCookie(c2);
-				//Mediante el método setMaxAge nos permite asignar un tiempo de expiración a nuestra 
-				//cookie.Permitiendo que la borre una vez se haya sobrepasado el tiempo de expiración.
-				c.setMaxAge(10);
-				c2.setMaxAge(10);
+				
 				
 				DTOUsuarios dto = new DTOUsuarios();
 				dto=dao.buscaUsuario(usuario, pass);
@@ -223,6 +221,12 @@ public String modificar(HttpServletRequest request, Model model, HttpServletResp
 	
 	return "modificacion";
 }
+@RequestMapping(value="/Registrar", method= {RequestMethod.GET, RequestMethod.POST})
+public String Registrar(HttpServletRequest request, Model model, HttpServletResponse resp) {
+	
+	return "registro";
+}
+
 
 @RequestMapping(value = "/ServletModificar", method = {RequestMethod.GET,RequestMethod.POST})
 public String servletmodificar (HttpServletRequest request, Model model, HttpServletResponse resp) {
@@ -373,8 +377,18 @@ public String carrito(HttpServletRequest request, Model model, HttpServletRespon
 	int itemsGuardados[] = (int[]) session.getAttribute("itemsGuardados");
 	
 	if (itemsGuardados == null) {
+		//Nos permite mostrar un jsp en el que nos dice que no hay ningún producto seleccionado
+		model.addAttribute("Cantidad1", cantidad1);
+		model.addAttribute("Cantidad2", cantidad2);
+		url="carritoCompra";
+		
+		/*
 		url = "listaArticulos";
+		List <DTOArticulos> listaArticulos = dao2.leeArticulos();
+		model.addAttribute("listaArticulos", listaArticulos);
+		*/
 	}else {
+	
 		url="carritoCompra";
 	
 	
@@ -384,14 +398,21 @@ public String carrito(HttpServletRequest request, Model model, HttpServletRespon
 			cantidad1 = itemsGuardados[pos];
 			precio1 = dao2.buscaArticulo(pos).getPrecio();
 			sumaTotal= (cantidad1*precio1);
+			
 		}
 		if(pos==1) {
 			cantidad2 = itemsGuardados[pos];
 			//int cantidad = itemsGuardados.get(pos);
 			precio2 = dao2.buscaArticulo(pos).getPrecio();
 			sumaTotal=  (cantidad1*precio1)+(cantidad2*precio2);
+			
 		}
 	}
+	
+	model.addAttribute("Cantidad1", cantidad1);
+	model.addAttribute("Precio1", precio1);
+	model.addAttribute("Cantidad2", cantidad2);
+	model.addAttribute("Precio2", precio2);
 	session.setAttribute("sumaTotal", sumaTotal);
 	model.addAttribute("Suma", sumaTotal);
 	}
