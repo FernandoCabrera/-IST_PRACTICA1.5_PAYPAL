@@ -125,6 +125,7 @@ public class HomeController {
 				//agregar el atributo proporcionado bajo el nombre proporcionado.
 				model.addAttribute("dto", dto);
 				
+				
 				/* Necesitamos guardar el DNI, ya que es clave primaria en la base de datos,
 				y lo utilizaremos para poder modificar los datos de un usuario.*/
 				guardaDni=dto.getDni();
