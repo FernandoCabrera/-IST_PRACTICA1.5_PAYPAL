@@ -57,7 +57,11 @@ Usuarios registrados en la BBDD
 
 
 </table>
+<a href="Inicio" class="txt2 bo1">
+Volver al inicio
+</a>
 </div>
+
 	</div>
 	</div>
 	

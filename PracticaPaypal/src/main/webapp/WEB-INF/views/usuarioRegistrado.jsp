@@ -39,7 +39,7 @@
 					
 						
 
-						<a href=" " class="txt2 bo1">
+						<a href="home " class="txt2 bo1">
 							Ir a lista articulos
 						</a>
 					</div>

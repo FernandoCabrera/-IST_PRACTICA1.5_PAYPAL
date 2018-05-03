@@ -39,8 +39,8 @@
 					
 						
 
-						<a href=" " class="txt2 bo1">
-							Ir a home
+						<a href=" Inicio" class="txt2 bo1">
+							Vover al inicio
 						</a>
 					</div>
 				

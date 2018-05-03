@@ -45,75 +45,75 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
+        <li class="active"><a href="home">Home</a></li>
         <li><a href="#">Products</a></li>
-        <li><a href="#">Deals</a></li>
-        <li><a href="#">Stores</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="Modificar">Modificar Datos Usuario</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Carrito</a></li>
+        <li><a href="Carrito"><span class="glyphicon glyphicon-shopping-cart"></span> Carrito</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
+ 
 <div class="container">    
+<c:forEach items= "${listaArticulos}" var="lista">
+  <c:if test= "${lista.codigo == 0}" >
   <div class="row">
     <div class="col-sm-4">
       <div class="panel panel-primary">
-        <div class="panel-heading">Nuestros Productos</div>
-        <div class="panel-body">
-        <c:forEach items= "${listaArticulos}" var="lista">
-<c:out value="${lista.nombre}" />
-<c:out value="${lista.precio}" />
-<c:out value="${lista.codigo}" />
-<c:if test= "${lista.codigo==0}" >
-<img src="<c:url value="/resources/images/pc.jpg"/>"/>
-  <!-- Botones para el carrito  -->
- <form action="Add" method=post>
- <input type="hidden" name="accion_servlet" value="accion1">
-<input type=submit value=Añadir></form>
-</c:if>
-<c:if test= "${lista.codigo==1}" >
-<img src="<c:url value="/resources/images/movil.jpg"/>"/>
-<form action="Add" method=post>
- <input type="hidden" name="accion_servlet" value="accion2">
-<input type=submit value=Añadir></form>
-</c:if>
-</c:forEach>
-<br></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-     
-
+        <div class="panel-heading">Pantalones deportivos</div>
+        <div class="panel-body"><img src="/practicaPaypal/resources/images/pantalones.jpg" class="img-responsive" style="width:100%"></div>
+        <div class="panel-footer">Articulo: ${lista.nombre}<br>Precio: ${lista.precio }
+       <!-- Botones para el carrito  -->
+	 <form action="Add" method=post>
+	 <input type="hidden" name="accion_servlet" value="accion1">
+	<input type=submit value=Añadir></form>
       </div>
-      
-    </div>
-  
-
-    <div class="col-sm-4">
-        <div class="panel-heading">Opciones usuario</div>
-        <div class="panel-body">
- <!-- Boton para modificar usuario -->
-<form action="Modificar" method=post>
-<input type=submit value=Modificar>
-</form>
-
-<!-- Boton pago total para llevarnos al carrito -->
-<form action="Carrito" method=post>
-<input type=submit value=Pago></form>
-        </div>
-        <div class="panel-footer"></div>
-     
-
       </div>
-      
     </div>
+    </c:if>
+    <c:if test= "${lista.codigo == 1}" >
+    <div class="col-sm-4"> 
+      <div class="panel panel-danger">
+        <div class="panel-heading">Camisetas de Fútbol</div>
+        <div class="panel-body"><img src="/practicaPaypal/resources/images/camiseta.jpg" class="img-responsive" style="width:100%"></div>
+		<div class="panel-footer">Articulo: ${lista.nombre}<br>Precio: ${lista.precio }
+		 <!-- Botones para el carrito  -->
+		 <form action="Add" method=post>
+		 <input type="hidden" name="accion_servlet" value="accion2">
+		<input type=submit value=Añadir></form>
+		
+		</div>
+      </div>
+    </div>
+    </c:if>
+    <c:if test= "${lista.codigo == 2}" >
+    <div class="col-sm-4"> 
+      <div class="panel panel-success">
+        <div class="panel-heading">Zapatillas Deportivas</div>
+        <div class="panel-body"><img src="/practicaPaypal/resources/images/BotasMercurial.jpg" class="img-responsive" style="width:100%">
+     <div class="panel-footer">Articulo: ${lista.nombre}<br>Precio: ${lista.precio }
+       <!-- Botones para el carrito  -->
+	 <form action="Add" method=post>
+	 <input type="hidden" name="accion_servlet" value="accion2">
+	<input type=submit value=Añadir></form>
+      </div>
+      </div>
+    </div>
+  </div>
+  </c:if>
+  </c:forEach>
 </div>
+
+<br><br>
+
+
 
 <footer class="container-fluid text-center">
   <p>Tienda Online Copyright</p>  
