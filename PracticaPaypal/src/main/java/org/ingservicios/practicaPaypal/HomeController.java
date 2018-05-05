@@ -101,8 +101,10 @@ public class HomeController {
 			Cookie c = new Cookie("Nombre", usuario);
 			Cookie c2 = new Cookie ("Password", pass);
 			c.setPath("/");
+			c.setMaxAge(-1);
 			resp.addCookie(c);
 			c2.setPath("/");
+			c2.setMaxAge(-1);
 			resp.addCookie(c2);
 			
 			url="usuario";
@@ -113,8 +115,10 @@ public class HomeController {
 				Cookie c = new Cookie("Nombre", usuario);
 				Cookie c2 = new Cookie ("Password", pass);
 				c.setPath("/");
+				c.setMaxAge(-1);
 				resp.addCookie(c);
 				c2.setPath("/");
+				c2.setMaxAge(-1);
 				resp.addCookie(c2);
 				
 				
@@ -137,7 +141,7 @@ public class HomeController {
 		
 		//Significa que el usuario no existe
 		if(!url.equals("usuario") && !url.equals("listaArticulos")) {
-			url="registro";
+			url="home";
 		}
 		
 		//En Spring se utiliza model.addAttribute en vez de req.setAttribute para 
@@ -155,7 +159,7 @@ public class HomeController {
 
 @RequestMapping(value = "/Servlet2", method = {RequestMethod.GET,RequestMethod.POST})
 public String servlet2 (HttpServletRequest request, Model model, HttpServletResponse resp) {
-
+	HttpSession session = request.getSession(true);
 	//Parameter(...) es del html 
 			String usuario = request.getParameter("username");
 			//Lo añadimos al model
@@ -177,8 +181,10 @@ public String servlet2 (HttpServletRequest request, Model model, HttpServletResp
 			Cookie c = new Cookie("Nombre", usuario);
 			Cookie c2 = new Cookie ("Password", password);
 			c.setPath("/");
+			c.setMaxAge(-1);
 			resp.addCookie(c);
 			c2.setPath("/");
+			c2.setMaxAge(-1);
 			resp.addCookie(c2);
 			
 			DTOUsuarios usuarioDTO = new DTOUsuarios(usuario,password,email,dni);
@@ -188,26 +194,16 @@ public String servlet2 (HttpServletRequest request, Model model, HttpServletResp
 			String url="";
 			
 			
-			if(dao.buscaUsuario(usuario, email, dni)==true) {//Busca usuario a través de correo,user,dni
+			if(dao.buscaUsuario(usuario, email, dni)==true || dao.buscaUsuarioEmail(usuario, email)!=null
+					|| dao.buscaUsuario(dni)!=null) {//Busca usuario a través de correo,user,dni
 					
 				    url="usuarioYaRegistrado";
-					variable=true;
-			}
-				
-			if(variable==false) { 
-				boolean variable2=false;
-				
-					if(dao.buscaUsuario(dni)!=null) {
-					
-					url="usuarioYaRegistrado";
-				variable2=true;
-					}
-			
-				if(variable2==false) {
+			}else {
+
 					dao.addUsuario(usuarioDTO);
 					url="usuarioRegistrado";
 				}
-			}
+			
 			return url;
 }
 
@@ -283,18 +279,22 @@ public String servletmodificar (HttpServletRequest request, Model model, HttpSer
 			//Lo añadimos al model
 			model.addAttribute("DNI", dni);
 			
-			
-			Cookie c = new Cookie("Nombre", usuario);
-			Cookie c2 = new Cookie ("Password", password);
-			c.setPath("/");
-			resp.addCookie(c);
-			c2.setPath("/");
-			resp.addCookie(c2);
-			
-			
-			DTOUsuarios usuarioDTO = new DTOUsuarios(usuario,password,email,dni);
-			
 			//A poder ser, añadir casos en los que el usuario introduzca dni que ya hay en la base de datos.
+			if((dao.buscaUsuario(dni)!=null && dao.buscaUsuario(dni).getDni().equals(guardaDni)) || 
+					dao.buscaUsuario(dni)==null ) {
+				DTOUsuarios usuarioDTO = new DTOUsuarios(usuario,password,email,dni);
+				Cookie c = new Cookie("Nombre", usuario);
+				Cookie c2 = new Cookie ("Password", password);
+				c.setPath("/");
+				/* Se supone que borra las cookies,pero no es asi
+				c.setMaxAge(-1); */
+				resp.addCookie(c);
+				c2.setPath("/");
+				/* Se supone que borra las cookies,pero no es asi
+				c2.setMaxAge(-1); */
+				resp.addCookie(c2);
+				
+				
 			dao.modificaUsuario(usuarioDTO, guardaDni);
 			
 			//A continuación, le asignamos el nuevo DNI, por si el usuario quiere volver a modificar sus 
@@ -302,20 +302,17 @@ public String servletmodificar (HttpServletRequest request, Model model, HttpSer
 			guardaDni=dni;
 			
 			url="usuarioModificado";
-			
-			
-		
-			
-			
+			}else {
+				url="usuarioNoModificado";
 			}
+			
+		}
+	}
 		return url;
 
 	}
-	return "usuarioNoModificado";
-
-
-}
-
+	
+	
 
 
 @RequestMapping(value="/Add", method= {RequestMethod.GET, RequestMethod.POST})
@@ -487,6 +484,24 @@ public String cancelaSuma(HttpServletRequest request, Model model, HttpServletRe
 	model.addAttribute("listaArticulos", listaArticulos);
 	
 	return "listaArticulos";
+	
+}
+@RequestMapping(value="/cerrarSesion", method= {RequestMethod.GET, RequestMethod.POST})
+public String cierraSesion(HttpServletRequest request, Model model, HttpServletResponse resp) {
+
+	HttpSession session = request.getSession(true);
+	session.invalidate();
+	
+	//Necesitamos mandar las cookies de nuevo vacías, (no borrado)
+	Cookie c = new Cookie("Nombre", "");
+	Cookie c2 = new Cookie ("Password", "");
+	c.setPath("/");
+	resp.addCookie(c);
+	c2.setPath("/");
+	resp.addCookie(c2);
+	
+	
+	return "home";
 	
 }
 }

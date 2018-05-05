@@ -86,6 +86,14 @@ public class DAOUsuarios implements DAOUsuariosInterfaz {
 					//Para operaciones INSERT, UPDATE o DELETE se usa el método jdbcTemplate.update
 					this.jdbcTemplate.update(sql,parametros);
 				}
+				public DTOUsuarios buscaUsuarioEmail(String nombre, String email){ //Devuelve el usuario buscado o null si no existe
+					String sql = "select * from usuarios where Nombre = ? AND Email = ?";
+					Object[ ] parametros = {nombre,email}; //Array de objetos
+					UsuarioMapper mapper = new UsuarioMapper();
+					List<DTOUsuarios> usuarios = this.jdbcTemplate.query(sql, parametros, mapper);
+					if (usuarios.isEmpty()) return null;
+					else return usuarios.get(0);
+					}
 		
 		
 }

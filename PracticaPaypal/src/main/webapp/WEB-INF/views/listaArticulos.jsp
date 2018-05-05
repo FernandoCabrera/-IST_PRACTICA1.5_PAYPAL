@@ -50,8 +50,8 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="home">Home</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="Modificar">Modificar Datos Usuario</a></li>
+        <li><a href="Modificar">Ajustes de perfil</a></li>
+        <li><a href="cerrarSesion">Cerrar sesión</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="Carrito"><span class="glyphicon glyphicon-shopping-cart"></span> Carrito</a></li>
