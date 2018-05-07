@@ -101,7 +101,8 @@ public class HomeController {
 			Cookie c = new Cookie("Nombre", usuario);
 			Cookie c2 = new Cookie ("Password", pass);
 			c.setPath("/");
-			c.setMaxAge(-1);
+			c.setMaxAge(-1);//la establece hasta el cierre del navegador
+			//si es 0 elimina la cookie
 			resp.addCookie(c);
 			c2.setPath("/");
 			c2.setMaxAge(-1);
@@ -117,7 +118,7 @@ public class HomeController {
 				c.setPath("/");
 				c.setMaxAge(-1);
 				resp.addCookie(c);
-				c2.setPath("/");
+				c2.setPath("/");//establecemos el camino una barra 
 				c2.setMaxAge(-1);
 				resp.addCookie(c2);
 				
@@ -155,7 +156,8 @@ public class HomeController {
 	}
 	
 	
-
+//enacrgado de gestionar si el usuario se encuentra registrado o no
+//en registro
 
 @RequestMapping(value = "/Servlet2", method = {RequestMethod.GET,RequestMethod.POST})
 public String servlet2 (HttpServletRequest request, Model model, HttpServletResponse resp) {
@@ -190,7 +192,7 @@ public String servlet2 (HttpServletRequest request, Model model, HttpServletResp
 			DTOUsuarios usuarioDTO = new DTOUsuarios(usuario,password,email,dni);
 		
 			
-			boolean variable=false;
+
 			String url="";
 			
 			
@@ -206,7 +208,7 @@ public String servlet2 (HttpServletRequest request, Model model, HttpServletResp
 			
 			return url;
 }
-
+//Encargado de gestionar la modificación
 
 @RequestMapping(value="/Modificar", method= {RequestMethod.GET, RequestMethod.POST})
 public String modificar(HttpServletRequest request, Model model, HttpServletResponse resp) {
@@ -215,26 +217,32 @@ public String modificar(HttpServletRequest request, Model model, HttpServletResp
 	model.addAttribute("listaArticulos", listaArticulos);
 	return "modificacion";
 }
+//Gestiona el home del menu de articulos
 @RequestMapping(value="/home", method= {RequestMethod.GET, RequestMethod.POST})
 public String home(HttpServletRequest request, Model model, HttpServletResponse resp) {
 	
 	HttpSession session = request.getSession(true);
+	//devolverá la sesión actual. Si la sesión actual no existe, entonces creará una nueva sesión .
+   //Si fuera false, devolverá sesión actual, si existe sesión actual y  no crea una nueva sesión .
+
 	List <DTOArticulos> listaArticulos = dao2.leeArticulos();
 	model.addAttribute("listaArticulos", listaArticulos);
 	return "listaArticulos";
 }
+//Es el encargado de ir a url registro
 @RequestMapping(value="/Registrar", method= {RequestMethod.GET, RequestMethod.POST})
 public String Registrar(HttpServletRequest request, Model model, HttpServletResponse resp) {
 	
 	return "registro";
 }
+//Para volver al home
 @RequestMapping(value="/Inicio", method= {RequestMethod.GET, RequestMethod.POST})
 public String Inicio(HttpServletRequest request, Model model, HttpServletResponse resp) {
 	
 	return "home";
 }
 
-
+//Gestiona los datos modificados
 @RequestMapping(value = "/ServletModificar", method = {RequestMethod.GET,RequestMethod.POST})
 public String servletmodificar (HttpServletRequest request, Model model, HttpServletResponse resp) {
 
@@ -313,7 +321,7 @@ public String servletmodificar (HttpServletRequest request, Model model, HttpSer
 	}
 	
 	
-
+//Es el encargado de gestionar añadir items al  carrito
 
 @RequestMapping(value="/Add", method= {RequestMethod.GET, RequestMethod.POST})
 public String add(HttpServletRequest request, Model model, HttpServletResponse resp) {
@@ -391,7 +399,7 @@ public String add(HttpServletRequest request, Model model, HttpServletResponse r
 	return "listaArticulos";
 }
 
-
+//Muestra los items del carrito
 @RequestMapping(value="/Carrito", method= {RequestMethod.GET, RequestMethod.POST})
 public String carrito(HttpServletRequest request, Model model, HttpServletResponse resp) {
 	String url="";
@@ -420,7 +428,7 @@ public String carrito(HttpServletRequest request, Model model, HttpServletRespon
 	
 	for(int pos=0; pos<itemsGuardados.length;pos++) {
 		if(pos==0) {
-			
+			//Donde pos coincide con el codigo del articulo
 			cantidad1 = itemsGuardados[pos];
 			precio1 = dao2.buscaArticulo(pos).getPrecio();
 			sumaTotal= (cantidad1*precio1);
